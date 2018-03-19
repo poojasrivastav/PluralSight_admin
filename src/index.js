@@ -6,6 +6,7 @@ import {Provider} from 'react-redux';
 import routes from './routes';
 import configureStore from './store/configureStore';
 import {loadCourses} from './actions/courseActions';
+import {loadAuthors} from './actions/authorActions';
 import './styles/styles.css'; //Webpack can import CSS files too!
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
@@ -14,6 +15,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 //browserHistory is for more modern browser that have good support for HTML5 push state, which is exactly what browserHistory uses behind the scenes.
 const store = configureStore();
 store.dispatch(loadCourses());
+store.dispatch(loadAuthors());
 
 render(
  <Provider store={store}>
