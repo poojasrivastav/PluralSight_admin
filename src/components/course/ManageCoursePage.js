@@ -15,14 +15,13 @@ class ManageCoursePage extends React.Component {
   };
   this.updateCourseState = this.updateCourseState.bind(this);
  }
-
+//onChange handler
  updateCourseState(event) {
   const field= event.target.name;
-  let course= Object.assign({}, this.state.course);
-  course[field]= event.target.value;
+  let course= Object.assign({}, this.state.course); //used object.assign to not mutate the state.
+  course[field]= event.target.value; //otherwise in this line state will be mutated.
   return this.setState({course: course});
  }
-
  render() {
   return(
    <CourseForm 
