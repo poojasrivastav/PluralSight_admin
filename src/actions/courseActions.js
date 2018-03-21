@@ -15,7 +15,7 @@ export function loadCoursesSuccess(courses) {
 
 export function updateCourseSuccess(course) {
 	return {
-		type: types.UPDATE_COURSES_SUCCESS,
+		type: types.UPDATE_COURSE_SUCCESS,
 		course
 	};
 }
@@ -27,7 +27,7 @@ export function createCourseSuccess(course) {
 	};
 }
 
-
+		
 //THUNK 
 export function loadCourses() {
   return function(dispatch) {
@@ -45,7 +45,7 @@ export function saveCourse(course) {
      course.id ? dispatch(updateCourseSuccess(savedCourse)) :
      dispatch(createCourseSuccess(savedCourse));
    }).catch(error =>{
- 	 throw(error);
+ 	   throw(error);
    });
  };
 }

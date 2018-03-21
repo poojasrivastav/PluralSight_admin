@@ -14,6 +14,7 @@ class ManageCoursePage extends React.Component {
    error: {}
   };
   this.updateCourseState = this.updateCourseState.bind(this);
+  this.saveCourse = this.saveCourse.bind(this);
  }
 //onChange handler
  updateCourseState(event) {
@@ -22,11 +23,20 @@ class ManageCoursePage extends React.Component {
   course[field]= event.target.value; //otherwise in this line state will be mutated.
   return this.setState({course: course});
  }
+
+ //dispatch saveCourse action
+ saveCourse(event) {
+  event.preventDefault();
+  this.props.actions.saveCourse(this.state.course);
+  this.context.router.push('/courses');
+
+ }
  render() {
   return(
    <CourseForm 
      course={this.state.course}
      onChange={this.updateCourseState}
+     onSave={this.saveCourse}
      allAuthors={this.props.authors}
      errors={this.state.error}
    />
@@ -36,9 +46,16 @@ class ManageCoursePage extends React.Component {
 
 ManageCoursePage.propTypes = {
 	course: PropTypes.object.isRequired,
-	authors: PropTypes.array.isRequired
+	authors: PropTypes.array.isRequired,
+	actions: PropTypes.object.isRequired
 
 };
+
+//Pull in the React Router context so router is available on this.context.router
+ManageCoursePage.contextTypes = {
+	router: PropTypes.object
+};
+
 function mapStateToProps(state, ownProps) {
 let course = {id: '', title: '', watchHref: '', authorId: '', length: '', category: ''};
 const authorsFormattedForDropdown = state.authors.map(author => {
