@@ -16,6 +16,14 @@ class ManageCoursePage extends React.Component {
   this.updateCourseState = this.updateCourseState.bind(this);
   this.saveCourse = this.saveCourse.bind(this);
  }
+
+ componentWillReceiveProps(nextProps) {
+  if(this.props.course.id != nextProps.course.id) {
+    //Necessary to populate form when existing course is loaded directly.
+    this.setState({course: Object.assign({}, nextProps.course)});
+  }
+ }
+ 
 //onChange handler
  updateCourseState(event) {
   const field= event.target.name;
@@ -39,12 +47,12 @@ class ManageCoursePage extends React.Component {
      onSave={this.saveCourse}
      allAuthors={this.props.authors}
      errors={this.state.error}
-   />
+   /> //
   );
  }	
 }
 
-ManageCoursePage.propTypes = {
+ManageCoursePage.propTypes = { 
 	course: PropTypes.object.isRequired,
 	authors: PropTypes.array.isRequired,
 	actions: PropTypes.object.isRequired
@@ -56,14 +64,27 @@ ManageCoursePage.contextTypes = {
 	router: PropTypes.object
 };
 
+function getCourseById(courses, id) {
+  
+  const course = courses.filter(course => course.id === id);
+  if(course.length) return course[0];    
+  return null;
+
+}
+
 function mapStateToProps(state, ownProps) {
-let course = {id: '', title: '', watchHref: '', authorId: '', length: '', category: ''};
-const authorsFormattedForDropdown = state.authors.map(author => {
+ let courseId = ownProps.params.id;  //from the path '/course/:id' //ownProps is used to get props from react-router
+ let course = {id: '', title: '', watchHref: '', authorId: '', length: '', category: ''};
+
+ if(courseId && state.courses.length > 0){                   //2nd condition is for=>no courses i.e [] on reload while course.id is present. we are still waiting for that AJAX call to come back, but this is running immediately on page load.
+  course = getCourseById(state.courses, courseId);          //  state.courses.length will be greater than 0 once our AJAX call is completed
+ }
+ const authorsFormattedForDropdown = state.authors.map(author => {
 	return {
 		value: author.id,
 		text: author.firstName + ' ' + author.lastName
 	};
-});
+ });
  return {
   course: course,
   authors: authorsFormattedForDropdown
